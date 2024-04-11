@@ -5,15 +5,15 @@
 
 import Foundation
 
-class RestfulCall: NSObject {
-	enum RequestMethod: String {
+public class RestfulCall: NSObject {
+	public enum RequestMethod: String {
 		case GET
 		case POST
 		case PUT
 		case DELETE
 	}
 
-	enum CallError: Error {
+	public enum CallError: Error {
 		case invalidParameters
 		case invalidResponse
 		case invalidMIMEType
@@ -24,7 +24,7 @@ class RestfulCall: NSObject {
 	var token: String?
 	var session: URLSession?
 
-	init(baseAddress: String, ignoreSSL: Bool = false, token: String? = nil) {
+	public init(baseAddress: String, ignoreSSL: Bool = false, token: String? = nil) {
 		super.init()
 		self.baseAddress = baseAddress
 		self.token = token
@@ -33,7 +33,7 @@ class RestfulCall: NSObject {
 			URLSession(configuration: .default)
 	}
 
-	func execute(_ operation: RequestMethod = .GET, endpoint path: String, body: Data? = nil, expecting mime: String = "application/json") async throws -> Data {
+	public func execute(_ operation: RequestMethod = .GET, endpoint path: String, body: Data? = nil, expecting mime: String = "application/json") async throws -> Data {
 		var request = try makeRequest(endpoint: path)
 		request.httpMethod = operation.rawValue
 		if let body {
@@ -80,7 +80,7 @@ extension RestfulCall {
 
 extension RestfulCall: URLSessionDelegate {
 	// swiftlint:disable:next line_length
-	func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge) async -> (URLSession.AuthChallengeDisposition, URLCredential?) {
+	public func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge) async -> (URLSession.AuthChallengeDisposition, URLCredential?) {
 		if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust {
 			guard let serverTrust = challenge.protectionSpace.serverTrust else {
 				return (.useCredential, nil)
