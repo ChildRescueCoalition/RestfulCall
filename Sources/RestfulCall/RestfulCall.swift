@@ -16,7 +16,7 @@ public class RestfulCall: NSObject {
 	public enum CallError: Error {
 		case invalidParameters
 		case invalidResponse
-		case invalidMIMEType
+		case invalidMIMEType(String)
 		case invalidHTTPStatus(Int)
 	}
 
@@ -71,7 +71,7 @@ extension RestfulCall {
 			throw CallError.invalidHTTPStatus(response.statusCode)
 		}
 		guard response.mimeType == mimeType else {
-			throw CallError.invalidMIMEType
+			throw CallError.invalidMIMEType(response.mimeType ?? "")
 		}
 
 		return result.0

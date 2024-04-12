@@ -21,6 +21,21 @@ final class RestfulCallTests: XCTestCase {
 		let info = try JSONDecoder().decode(EchoResponse.self, from: result)
 
 		XCTAssertEqual(info.method, "GET")
-		print("My IP is \(info.ip)")
+		XCTAssertTrue(info.ip.contains("."))
+	}
+
+	func testIncompatibleMIME() async throws {
+		let gridcopTest = RestfulCall(baseAddress: "https://test.gridcop.com", token: "fakeTOKEN")
+		do {
+			_ = try await gridcopTest.execute(.GET, endpoint: "/", expecting: "text/html")
+		}
+		catch let callError as RestfulCall.CallError {
+			switch callError {
+			case let .invalidMIMEType(mime):
+				print("MIME: \(mime)")
+			default:
+				XCTFail("Wrong exception thrown")
+			}
+		}
 	}
 }
