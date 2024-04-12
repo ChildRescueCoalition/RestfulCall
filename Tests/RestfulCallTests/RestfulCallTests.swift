@@ -1,6 +1,19 @@
 import XCTest
 @testable import RestfulCall
 
+struct EchoResponse: Decodable {
+	let headers: [String: String]
+	let method: String
+	let `protocol`: String
+	let path: String
+	let body: String
+	let hostname: String
+	let ip: String
+	let ips: [String]
+	let xhr: Bool
+	let fresh: Bool
+}
+
 final class RestfulCallTests: XCTestCase {
 	func testExample() throws {
 		// XCTest Documentation
@@ -11,27 +24,6 @@ final class RestfulCallTests: XCTestCase {
 	}
 
 	func testFetchIPfromGridcop() async throws {
-		struct TimeListEntry: Decodable {
-			let timeReceived: Int
-			let timeVariation: Int
-			let timeElapsed: Int
-			let hostName: String
-			let hostTime: Date
-		}
-
-		struct EchoResponse: Decodable {
-			let headers: [String: String]
-			let method: String
-			let `protocol`: String
-			let path: String
-			let body: String
-			let hostname: String
-			let ip: String
-			let ips: [String]
-			let xhr: Bool
-			let fresh: Bool
-		}
-
 		do {
 			let gridcopTest = RestfulCall(baseAddress: "https://test.gridcop.com", token: "fakeTOKEN")
 			let result = try await gridcopTest.execute(.GET, endpoint: "/")
