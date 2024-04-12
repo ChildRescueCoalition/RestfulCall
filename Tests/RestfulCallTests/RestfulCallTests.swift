@@ -16,15 +16,11 @@ struct EchoResponse: Decodable {
 
 final class RestfulCallTests: XCTestCase {
 	func testFetchIPfromGridcop() async throws {
-		do {
-			let gridcopTest = RestfulCall(baseAddress: "https://test.gridcop.com", token: "fakeTOKEN")
-			let result = try await gridcopTest.execute(.GET, endpoint: "/")
-			let info = try JSONDecoder().decode(EchoResponse.self, from: result)
+		let gridcopTest = RestfulCall(baseAddress: "https://test.gridcop.com", token: "fakeTOKEN")
+		let result = try await gridcopTest.execute(.GET, endpoint: "/")
+		let info = try JSONDecoder().decode(EchoResponse.self, from: result)
 
-			XCTAssertEqual(info.method, "GET")
-			print("My IP is \(info.ip)")
-		} catch {
-			XCTFail(error.localizedDescription)
-		}
+		XCTAssertEqual(info.method, "GET")
+		print("My IP is \(info.ip)")
 	}
 }
