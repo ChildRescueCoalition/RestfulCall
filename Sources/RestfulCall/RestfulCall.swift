@@ -33,7 +33,7 @@ public class RestfulCall: NSObject {
 			URLSession(configuration: .default)
 	}
 
-	public func execute(_ operation: RequestMethod = .GET, endpoint path: String, body: Data? = nil, expecting mime: String = "application/json") async throws -> Data {
+	public func execute(_ operation: RequestMethod = .GET, endpoint path: String, body: Data? = nil, expecting mime: String? = "application/json") async throws -> Data {
 		var request = try makeRequest(endpoint: path)
 		request.httpMethod = operation.rawValue
 		if let body {
@@ -58,7 +58,7 @@ extension RestfulCall {
 		return request
 	}
 
-	func sessionData(with request: URLRequest, expecting mimeType: String) async throws -> Data {
+	func sessionData(with request: URLRequest, expecting mimeType: String?) async throws -> Data {
 		guard let session else {
 			throw CallError.invalidParameters
 		}
