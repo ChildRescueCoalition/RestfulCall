@@ -23,8 +23,7 @@ final class RestfulCallTests: XCTestCase {
 		let httpBin = RestfulCall(baseAddress: "https://httpbin.org", token: "fakeTOKEN")
 		do {
 			_ = try await httpBin.execute(.GET, endpoint: "/get", expecting: "text/html")
-		}
-		catch let callError as RestfulCall.CallError {
+		} catch let callError as RestfulCall.CallError {
 			switch callError {
 			case let .invalidMIMEType(mime):
 				XCTAssertEqual("application/json", mime)
@@ -39,8 +38,7 @@ final class RestfulCallTests: XCTestCase {
 		let httpBin = RestfulCall(baseAddress: "https://httpbin.org", token: "fakeTOKEN")
 		do {
 			_ = try await httpBin.execute(.GET, endpoint: "/get", expecting: nil)
-		}
-		catch let callError as RestfulCall.CallError {
+		} catch let callError as RestfulCall.CallError {
 			switch callError {
 			case let .invalidMIMEType(mime):
 				XCTAssertEqual("application/json", mime)
