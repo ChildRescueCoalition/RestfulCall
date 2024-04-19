@@ -4,6 +4,9 @@
 //
 
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 public class RestfulCall: NSObject {
 	public enum RequestMethod: String {
