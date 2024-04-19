@@ -29,6 +29,7 @@ final class RestfulCallTests: XCTestCase {
 			case let .invalidMIMEType(mime):
 				XCTAssertEqual("application/json", mime)
 			default:
+				print("CALLERROR", callError)
 				XCTFail("Wrong exception thrown")
 			}
 		}
