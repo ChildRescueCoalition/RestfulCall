@@ -21,6 +21,7 @@ public class RestfulCall: NSObject {
 		case invalidResponse
 		case invalidMIMEType(String)
 		case invalidHTTPStatus(Int)
+		case invalidData
 	}
 
 	var baseAddress: String?
@@ -68,7 +69,15 @@ extension RestfulCall {
 			throw CallError.invalidParameters
 		}
 
-		let result = try await session.data(for: request)
+		typealias Continuation = CheckedContinuation<(Data?, URLResponse?), Never>
+		let result = await withCheckedContinuation({ (continuation: Continuation) in
+			let task = session.dataTask(with: request) { data, response, error in
+				print("TASK COMPLETED")
+				continuation.resume(returning: (data, response))
+			}
+			task.resume()
+		})
+
 		guard let response = result.1 as? HTTPURLResponse else {
 			throw CallError.invalidResponse
 		}
@@ -78,8 +87,11 @@ extension RestfulCall {
 		guard response.mimeType == mimeType else {
 			throw CallError.invalidMIMEType(response.mimeType ?? "")
 		}
+		guard let body: Data = result.0 else {
+			throw CallError.invalidData
+		}
 
-		return result.0
+		return body
 	}
 }
 
